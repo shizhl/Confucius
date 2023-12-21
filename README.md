@@ -1,10 +1,10 @@
-# Confucius: Iterative Tool Learning from Introspection Feedback by Easy-to-Difficult Curriculum
+# Confucius-Tool-Learning
 
 <div align=center>
 	<img src="./README.assets/image-20230817114433957.png"/>
 </div>
 
-Iterative Tool Learning from Introspection Feedback by Easy-to-Difficult Curriculum.
+Confucius: Iterative Tool Learning from Introspection Feedback by Easy-to-Difficult Curriculum.
 
 ## News
 
