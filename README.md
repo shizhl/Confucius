@@ -131,4 +131,13 @@ We use **4 NVIDIA A100-PCIE-80GB GPUs** to train our model.
 
 For any questions or requests, feel free to contact me at shizhl@mail.sdu.edu.cn. 
 
+## Citation
 
+```
+@article{gao2023confucius,
+  title={Confucius: Iterative Tool Learning from Introspection Feedback by Easy-to-Difficult Curriculum},
+  author={Gao, Shen and Shi, Zhengliang and Zhu, Minghang and Fang, Bowen and Xin, Xin and Ren, Pengjie and Chen, Zhumin and Ma, Jun},
+  journal={arXiv preprint arXiv:2308.14034},
+  year={2023}
+}
+```
