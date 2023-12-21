@@ -133,7 +133,9 @@ For any questions or requests, feel free to contact me at shizhl@mail.sdu.edu.cn
 
 ## Other work
 
-We also release the `Fuzi.mingcha`, a Chinese legal LLM, which has shown strong performance in legal tasks. Click [here](https://github.com/irlab-sdu/fuzi.mingcha) for more details. Thanks a lot for all the prior work.
+We also release the `Fuzi-Mingcha`, a Chinese legal LLM, which has shown strong performance in legal tasks. Fuzi-Mingcha is jointly developed by Shandong University, Inspur, and China University of Political Science and Law, which is trained based on massive Chinese unsupervised judicial corpus and supervised judicial fine-tuning data using ChatGLM as backbone. It supports law search, case analysis, trinitarian reasoning judgment and judicial dialog, aiming to provide users with all-round and highly accurate legal consultation and answer services.
+
+Click [here](https://github.com/irlab-sdu/fuzi.mingcha) for more details.  Thanks a lot for all the prior works.
 
 ## Citation
 
