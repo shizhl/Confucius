@@ -12,19 +12,19 @@ Confucius: Iterative Tool Learning from Introspection Feedback by Easy-to-Diffic
 - [2023.8.27] Our paper is now available at https://arxiv.org/abs/2308.14034
 
 ## Dataset
-### How to Download?
-The dataset has been shared on the Google Drive, which can be found/downloaded in once the license and policy are available.
+
+We collect a tool-use dataset via Self-Instruct, i.e., prompting ChatGPT to generate tool-use sample automatically.
 
 
 ### Data description
 ```json
 {   
   "api": "The api for solve the specific task",
-  "number": "The number for calling API",
+  "number": "The number for calling API in this case",
   "prompt": "The prompt for generating this example",
   "task": "The task name",
   "question": "The specific query based on the API in the this task",
-  "_answer": "The solution to solve problem in the format of chain of thought (COT), where the above APIs are called back"
+  "_answer": "The solution to solve problem in the format of chain of thought (COT), where the above APIs are called back. (Optional)"
 }
 ```
 A concrete example:
@@ -67,9 +67,9 @@ train.py --per_device_train_batch_size <batch size> \
       --gradient_accumulation_steps <16 for default> \
       --model_name_or_path <huggingface model path > \
       --train_data_path <data path for training (json/jsonl format)> \
-      --naive <int, see our paper for derails> \
-      --in_domain <int, see our paper for derails> \
-      --cross_domain <int, see our paper for derails> 
+      --warm_up <int, the number of training sample in warm up stage> \
+      --in_domain <int, the number of training sample in in-category stage> \
+      --cross_domain <int, the number of training sample in cross-category stage> 
 ```
 
 
@@ -83,7 +83,7 @@ torchrun --nnodes 1 --nproc_per_node  4  --master_port 9994 \
       --model_name_or_path llama \
       --train_data_path   ../train.v4.151074.json  \
       --output_dir  \
-      --naive 0 --in_domain 5000 --cross_domain 5000 \
+      --warm_up 0 --in_domain 5000 --cross_domain 5000 \
       --max_epochs 25 \
 ```
 
@@ -100,41 +100,11 @@ We provide the following command to conduct the inference.
 ```txt
 python inference.py \
 --model_name_or_path llama \
---mode in \
 --output_file <path to store the model output> \
---save_ckpt_path   <the weight path used in training.> \
 --huggingface_ckpt_path <the path used to restore the huggingface-style weight>  \
 --n <the number of examples used for in-context learning> \
 --data_path <the test dataset> \
---ranks  <the device id of gpus, which can inference in batch>
-```
-
-
-For the tuning-free baseline
-
-```txt
-python inference.py \
---model_name_or_path Llama2 \
---mode in \
---output_file output.json  \
---n 3 \
---data_path test.json \
---ranks  4,5,6,7
-```
-
-
-For the tuning-based baselines
-
-```txt
-python inference.py \
---model_name_or_path llama \
---mode in \
---output_file <path to store the model output> \
---save_ckpt_path   <the weight path used in training.> \
---huggingface_ckpt_path <the path used to restore the huggingface-style weight>  \
---n 0  \
---data_path  test.json  \
---ranks  4,5,6,7
+--ranks  <the device id of gpus, which can inference with multiple GPU devices>
 ```
 
 the successful runing state is:
@@ -159,16 +129,6 @@ We use **4 NVIDIA A100-PCIE-80GB GPUs** to train our model.
 
 - [ ] The code and dataset will be released as soon as possible.
 
-If you have any questions or requests, feel free to contact me at shizhl@mail.sdu.edu.cn. 
+For any questions or requests, feel free to contact me at shizhl@mail.sdu.edu.cn. 
 
-# Citation
-
-```txt
-@article{gao2023confucius,
-  title={Confucius: Iterative Tool Learning from Introspection Feedback by Easy-to-Difficult Curriculum},
-  author={Gao, Shen and Shi, Zhengliang and Zhu, Minghang and Fang, Bowen and Xin, Xin and Ren, Pengjie and Chen, Zhumin and Ma, Jun},
-  journal={arXiv preprint arXiv:2308.14034},
-  year={2023}
-}
-```
 
