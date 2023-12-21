@@ -131,6 +131,10 @@ We use **4 NVIDIA A100-PCIE-80GB GPUs** to train our model.
 
 For any questions or requests, feel free to contact me at shizhl@mail.sdu.edu.cn. 
 
+## Other work
+
+We also release the `Fuzi.mingcha`, a Chinese legal LLM, which has shown strong performance in legal tasks. Click [here](https://github.com/irlab-sdu/fuzi.mingcha) to more details. Thanks a lot for all the prior work.
+
 ## Citation
 
 ```
