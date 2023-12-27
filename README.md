@@ -141,9 +141,9 @@ Click [here](https://github.com/irlab-sdu/fuzi.mingcha) for more details.  Thank
 
 ```
 @inproceedings{Gao2023ConfuciusIT,
-title={Confucius: Iterative Tool Learning from Introspection Feedback by Easy-to-Difficult Curriculum},
-author={Shen Gao and Zhengliang Shi and Minghang Zhu and Bowen Fang and Xin Xin and Pengjie Ren and Zhumin Chen and Jun Ma and Zhaochun Ren},
-booktitle={AAAI},
-year={2024}
+  title={Confucius: Iterative Tool Learning from Introspection Feedback by Easy-to-Difficult Curriculum},
+  author={Shen Gao and Zhengliang Shi and Minghang Zhu and Bowen Fang and Xin Xin and Pengjie Ren and Zhumin Chen and Jun Ma and Zhaochun Ren},
+  booktitle={AAAI},
+  year={2024}
 }
 ```
