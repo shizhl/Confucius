@@ -1,30 +1,39 @@
-# Confucius-Tool-Learning
+![image-20230817114440564](./assets/image-20230817114433957.png)
 
-<div align=center>
-	<img src="./README.assets/image-20230817114433957.png"/>
-</div>
+# *Confucius*
 
-Confucius: Iterative Tool Learning from Introspection Feedback by Easy-to-Difficult Curriculum.
+Iterative Tool Learning from Introspection Feedback by Easy-to-Difficult Curriculum
 
-## News
 
-- [2023.12.9] Our work are accepted via AAAI 2024!
-- [2023.8.27] Our paper is now available at https://arxiv.org/abs/2308.14034
+
+## Introduction
+
+Augmenting large language models (LLMs) with external tools has emerged as a promising approach to extending the capability of LLMs. Although some works employ open-source LLMs for the tool learning task, most of them are trained in a controlled environment in which LLMs only learn to execute the human-provided tools.
+
+However, selecting proper tools from the large toolset is also a crucial ability for the tool learning model to be applied in real-world applications. Existing methods usually directly employ self-instruction methods to train the model, which ignores differences in tool complexity. In this paper, we propose the ***Confucius***, a novel tool learning framework to train LLM to use complicated tools in real-world scenarios
+
+
+
+## Methodology
+
+In this paper, we propose the ***Confucius***,  a tool-learning framework to train LLM to use complicated tools in real-world scenarios. \ours contains two main phases:
+
+1. In order to tackle the first challenge, we first propose a multi-stage learning method to teach the LLM to use various tools from an easy-to-difficult curriculum;
+2.  We propose an **Iterative Self-instruct from Introspective Feedback** (ISIF) technique to dynamically construct the dataset to improve the ability to use the complicated tool.
+
+
 
 ## Dataset
-
-We collect a tool-use dataset via Self-Instruct, i.e., prompting ChatGPT to generate tool-use sample automatically.
-
 
 ### Data description
 ```json
 {   
   "api": "The api for solve the specific task",
-  "number": "The number for calling API in this case",
+  "number": "The number for calling API",
   "prompt": "The prompt for generating this example",
   "task": "The task name",
   "question": "The specific query based on the API in the this task",
-  "_answer": "The solution to solve problem in the format of chain of thought (COT), where the above APIs are called back. (Optional)"
+  "_answer": "The solution to solve problem in the format of chain of thought (COT), where the above APIs are called back"
 }
 ```
 A concrete example:
@@ -56,7 +65,34 @@ A concrete example:
 }
 ```
 
+
+### How to Download?
+The full dataset [[Click Here]](https://drive.google.com/drive/folders/1Q0BYalic9XkQZYz8yHTBazfBl9MSydFS?usp=sharing) has been shared on the Google Drive. We provide the different scales of training datasets, including `small`, `middle`, and `large` scales (further extended).
+
+The dataset contains all the toolset in our work. For the evaluation of `unseen` setting in our work, you should remove the tools in the test dataset, which evaluate the generalizability of the model.  
+
+
+## How to Reproduce?
+
+### Environment Set up
+
+1. python 3.9 
+2. pytorch lightning (1.9.0)
+3. Deepspeed (deepspeed in pytorch lightning)
+4. transformer (install from source)
+5. pytorch (torch 1.11)
+6. tqdm
+7. openai (only for collecting data)
+
+We optimize the model using deepspeed ZeRO-three  strategy with the learning rate of $5e^{-5}$ and the weight decay coefficient of 0.01.
+The training of our model can be done within 20 hours with **4 NVIDIA A100-PCIE-80GB GPUs**.
+
+
 ## Train
+
+We mainly use the `pytorch-lightning` library and `transformers` library to train our models. We also employ the `deepspeed` library to accelerate the training process.
+
+See the following specific commands.
 
 ```txt
 torchrun --nnodes <num of machine> --nproc_per_node <number of device per machine>  --master_port <port>  \
@@ -67,11 +103,12 @@ train.py --per_device_train_batch_size <batch size> \
       --gradient_accumulation_steps <16 for default> \
       --model_name_or_path <huggingface model path > \
       --train_data_path <data path for training (json/jsonl format)> \
-      --warm_up <int, the number of training sample in warm up stage> \
-      --in_domain <int, the number of training sample in in-category stage> \
-      --cross_domain <int, the number of training sample in cross-category stage> 
+      --warmup <int, see our paper for derails> \
+      --in_catefory <int, see our paper for derails> \
+      --cross_catefory <int, see our paper for derails> 
 ```
 
+Please replace the command `args` with your own setting. Here is an example.
 
 
 ```txt
@@ -83,67 +120,32 @@ torchrun --nnodes 1 --nproc_per_node  4  --master_port 9994 \
       --model_name_or_path llama \
       --train_data_path   ../train.v4.151074.json  \
       --output_dir  \
-      --warm_up 0 --in_domain 5000 --cross_domain 5000 \
+      --naive 0 --in_category 5000 --cross_category 5000 \
       --max_epochs 25 \
 ```
 
 the successful runing state is:
 
-![image-20230817165314476](README.assets/image-20230817165314476.png)
+![image-20230817165314476](assets/image-20230817165314476.png)
 
-
+To update the dataset, you can use the `update` function in our code to select the tool-use examples that the model struggles to answer. And use these selected examples to construct more similar examples via SELF-Instruct.
 
 ## Inference
 
-We provide the following command to conduct the inference.
+For the ChatGPT or Davinci-text-003 (now deprecated), you can directly call the OpenAI API to following the setting of our work.
+For the Open-source models, we use the weight downloaded from huggingface platform and use the `transformers` library for the inference.  And the successful runing state is:
 
-```txt
-python inference.py \
---model_name_or_path llama \
---output_file <path to store the model output> \
---huggingface_ckpt_path <the path used to restore the huggingface-style weight>  \
---n <the number of examples used for in-context learning> \
---data_path <the test dataset> \
---ranks  <the device id of gpus, which can inference with multiple GPU devices>
-```
-
-the successful runing state is:
-
-![image-20230818085121242](README.assets/image-20230818085121242.png)
+![image-20230818085121242](assets/image-20230818085121242.png)
 
 
-## Environment Set up
+# Citation
 
-1. python 3.9 
-2. pytorch lightning (1.9.0)
-3. Deepspeed (deepspeed in pytorch lightning)
-4. transformer (install from source)
-5. pytorch (torch 1.11)
-6. tqdm
-7. openai (only for collecting data)
-
-We optimize the model using deepspeed ZeRO-three  strategy with the learning rate of $5e^{-5}$ and the weight decay coefficient of 0.01.
-We use **4 NVIDIA A100-PCIE-80GB GPUs** to train our model.
-
-## Todo
-
-- [ ] The code and dataset will be released as soon as possible.
-
-For any questions or requests, feel free to contact me at shizhl@mail.sdu.edu.cn. 
-
-## Other work
-
-We also release the `Fuzi-Mingcha`, a Chinese legal LLM, which has shown strong performance in legal tasks. Fuzi-Mingcha is jointly developed by Shandong University, Inspur, and China University of Political Science and Law, which is trained based on massive Chinese unsupervised judicial corpus and supervised judicial fine-tuning data using ChatGLM as backbone. It supports law search, case analysis, trinitarian reasoning judgment and judicial dialog, aiming to provide users with all-round and highly accurate legal consultation and answer services.
-
-Click [here](https://github.com/irlab-sdu/fuzi.mingcha) for more details.  Thanks a lot for all the prior works.
-
-## Citation
-
-```
-@inproceedings{Gao2023ConfuciusIT,
-  title={Confucius: Iterative Tool Learning from Introspection Feedback by Easy-to-Difficult Curriculum},
-  author={Shen Gao and Zhengliang Shi and Minghang Zhu and Bowen Fang and Xin Xin and Pengjie Ren and Zhumin Chen and Jun Ma and Zhaochun Ren},
-  booktitle={AAAI},
-  year={2024}
+```text
+ @inproceedings{gao2023confucius,
+    title={Confucius: Iterative tool learning from introspection feedback by easy-to-difficult curriculum}, 
+    author={Gao, Shen and Shi, Zhengliang and Zhu, Minghang and Fang, Bowen and Xin, Xin and Ren, Pengjie and Chen, Zhumin and Ma, Jun},
+    booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
+    year={2024}
 }
 ```
+
