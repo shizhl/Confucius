@@ -16,7 +16,7 @@ However, selecting proper tools from the large toolset is also a crucial ability
 
 ## Methodology
 
-In this paper, we propose the ***Confucius***,  a tool-learning framework to train LLM to use complicated tools in real-world scenarios. \ours contains two main phases:
+In this paper, we propose the ***Confucius***,  a tool-learning framework to train LLM to use complicated tools in real-world scenarios. The proposed Confucius contains two main phases:
 
 1. In order to tackle the first challenge, we first propose a multi-stage learning method to teach the LLM to use various tools from an easy-to-difficult curriculum;
 2.  We propose an **Iterative Self-instruct from Introspective Feedback** (ISIF) technique to dynamically construct the dataset to improve the ability to use the complicated tool.
