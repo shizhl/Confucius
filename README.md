@@ -1,10 +1,11 @@
-![image-20230817114440564](./assets/image-20230817114433957.png)
 
-# *Confucius*
+<div align="center">
+   <h1>Confucius <img src="./assets/image-20230817114433957.png" alt="Logo" width="50px" height="50"/></h1>
+</div>
 
-Iterative Tool Learning from Introspection Feedback by Easy-to-Difficult Curriculum
+This project aims to teach large language models (LLMs) to use external tools, enabling them as agents to for practical task planning and tool calling. To achieve this, we propose the "Iterative Tool Learning from Introspection Feedback by Easy-to-Difficult Curriculum". Here is the brief comparison with previous method and more details can be found in our [paper](https://arxiv.org/abs/2308.14034).
 
-
+![img.png](./assets/comparison.png)
 
 ## Introduction
 
@@ -12,6 +13,14 @@ Augmenting large language models (LLMs) with external tools has emerged as a pro
 
 However, selecting proper tools from the large toolset is also a crucial ability for the tool learning model to be applied in real-world applications. Existing methods usually directly employ self-instruction methods to train the model, which ignores differences in tool complexity. In this paper, we propose the ***Confucius***, a novel tool learning framework to train LLM to use complicated tools in real-world scenarios
 
+![img.png](./assets/method.png)
+
+## News
+
+- **[2025.2.3]** Our code has been moved to this new [github repo](https://github.com/mangopy/Confucius-tool-learning/)!
+- **[2024.3.1]** Our dataset has been uploaded and can be download. 
+- **[2024.1.31]** Our code has been released in the github. See this [repo](https://github.com/shizhl/Confucius) for details.
+- **[2023.12.20]** Our paper has been accepted by AAAI 2023 🎉🎉🎉.
 
 
 ## Methodology
@@ -20,7 +29,6 @@ In this paper, we propose the ***Confucius***,  a tool-learning framework to tra
 
 1. In order to tackle the first challenge, we first propose a multi-stage learning method to teach the LLM to use various tools from an easy-to-difficult curriculum;
 2.  We propose an **Iterative Self-instruct from Introspective Feedback** (ISIF) technique to dynamically construct the dataset to improve the ability to use the complicated tool.
-
 
 
 ## Dataset
@@ -75,15 +83,16 @@ The dataset contains all the toolset in our work. For the evaluation of `unseen`
 ## How to Reproduce?
 
 ### Environment Set up
-
-1. python 3.9 
-2. pytorch lightning (1.9.0)
-3. Deepspeed (deepspeed in pytorch lightning)
-4. transformer (install from source)
-5. pytorch (torch 1.11)
-6. tqdm
-7. openai (only for collecting data)
-
+Necessary environment python package.
+```
+python 3.9 
+pytorch lightning (1.9.0)
+Deepspeed (deepspeed in pytorch lightning)
+transformer (install from source)
+pytorch (torch 1.11)
+tqdm
+openai (only for collecting data)
+```
 We optimize the model using deepspeed ZeRO-three  strategy with the learning rate of $5e^{-5}$ and the weight decay coefficient of 0.01.
 The training of our model can be done within 20 hours with **4 NVIDIA A100-PCIE-80GB GPUs**.
 
@@ -148,4 +157,3 @@ For the Open-source models, we use the weight downloaded from huggingface platfo
     year={2024}
 }
 ```
-
